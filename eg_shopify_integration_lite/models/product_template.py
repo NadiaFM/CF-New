@@ -57,7 +57,7 @@ class ProductTemplate(models.Model):
         text = ""
         partial = False
         history_id_list = []
-        created_product_count = 0  # Counter variable for created products
+        # created_product_count = 0  # Counter variable for created products
 
         if instance_id:
             shop_connection = self.get_connection_from_shopify(instance_id=instance_id)
@@ -87,9 +87,9 @@ class ProductTemplate(models.Model):
                             product_list = response
                         # raise UserError(product_list)
 
-                        for product in product_list:
-                            if created_product_count >= 10:  # Check if 5 products are already created
-                                break
+                        # for product in product_list:
+                        #     if created_product_count >= 10:  # Check if 5 products are already created
+                        #         break
 
                             product = product.to_dict()  # convert into dictionary
                             product_template_id = None
@@ -227,7 +227,7 @@ class ProductTemplate(models.Model):
                                         status = "yes"
                                         text = "This product was successfully created and mapped"
                                         product_template_id = product_tmpl_id
-                                        created_product_count += 1  # Increment the created product count
+                                        # created_product_count += 1  # Increment the created product count
                                     else:
                                         text = "This odoo product {} is  not same attribute and value for shopify product so it is not mapping".format(
                                             product_id.name)
@@ -248,7 +248,7 @@ class ProductTemplate(models.Model):
                                         status = "yes"
                                         text = "This product was successfully created and mapped"
                                         product_template_id = product_tmpl_id
-                                        created_product_count += 1  # Increment the created product count
+                                        # created_product_count += 1  # Increment the created product count
                                     else:
                                         partial = True
                                         status = "no"
