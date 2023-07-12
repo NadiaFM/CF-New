@@ -1,0 +1,57 @@
+<odoo>
+    <record model="ir.ui.view" id="eg_ecom_instance_shopify_form_view">
+        <field name="name">eg.ecom.instance.shopify.form.view</field>
+        <field name="model">eg.ecom.instance</field>
+        <field name="inherit_id" ref="eg_ecommerce_base.eg_ecom_instance_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Credential" attrs="{'invisible': [('provider', '!=', 'eg_shopify')]}">
+                    <group>
+                        <field name="company_id"/>
+                        <field name="warehouse_id"/>
+                        <field name="location_id"/>
+                        <label for='shopify_location_id'/>
+                        <div class="o_row">
+                        <!-- <label for='shopify_location_id'/> -->
+                            <field name="shopify_location_id" domain="[('instance_id','=',id)]"/>
+                            <button name="update_shopify_locations" string="Update Shopify Locations" class="oe_highlight" type="object"/>
+                        </div>
+                        <field name="shopify_api_key" attrs="{'required': [('provider', '=', 'eg_shopify')]}"/>
+                        <field name="shopify_password" attrs="{'required': [('provider', '=', 'eg_shopify')]}"/>
+                        <field name="shopify_version" attrs="{'required': [('provider', '=', 'eg_shopify')]}"/>
+                        <field name="shopify_shop" placeholder="Name of shop"
+                               attrs="{'required': [('provider', '=', 'eg_shopify')]}"/>
+                        <field name ="import_products_in_scheduler" />
+                        <field name ="export_products_in_scheduler" />
+                        <field name ="import_customers_in_scheduler" />
+                        <field name ="import_orders_in_scheduler" />
+                        <field name = "sync_inventory_to_shopify"/>
+
+                    </group>
+                </page>
+                <page string="Other Configuration" attrs="{'invisible': [('provider', '!=', 'eg_shopify')]}">
+                    <group>
+                        <field name="spf_order_name" attrs="{'required': [('provider', '=', 'eg_shopify')]}"/>
+                        <field name="spf_last_order_date" required='1'/>
+                        <field name="tax_add_by" attrs="{'required': [('provider', '=', 'eg_shopify')]}"/>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//button[@name='test_connection_of_instance']" position="after">
+                  <button name="Run" string="Run Manually" class="oe_highlight" type="object"/>
+            </xpath>
+        </field>
+    </record>
+        <record id="cron_track" model="ir.cron">
+        <field name="name">Shopify Sync Scheduler</field>
+        <field name="model_id" ref="model_eg_ecom_instance" />
+        <field name="state">code</field>
+        <field name="code">model.ScheduledActionForShopify()</field>
+        <field name="user_id" ref="base.user_root" />
+        <field name='interval_number'>20</field>
+        <field name='interval_type'>minutes</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False" />
+
+    </record>
+</odoo>
