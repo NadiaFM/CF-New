@@ -57,6 +57,7 @@ class ProductTemplate(models.Model):
         text = ""
         partial = False
         history_id_list = []
+        products_without_sku=[]
         # created_product_count = 0  # Counter variable for created products
 
         if instance_id:
@@ -102,6 +103,14 @@ class ProductTemplate(models.Model):
                                     eg_product_tmpl_id and (not eg_product_tmpl_id.odoo_product_tmpl_id)):
                                 sku = product.get("variants")[0].get("barcode")
                                 if not sku:
+                                    products_without_sku.append({
+                                    "id": product.get("id"),
+                                    "name": product.get("title")
+                                })
+                                
+                                    
+
+
                                     continue
                                 # Asir - appending company with sku
                                 product_id = self.env["product.product"].search(
@@ -268,6 +277,7 @@ class ProductTemplate(models.Model):
                                                                                 "product_id": product_template_id and product_template_id.id or None,
                                                                                 "child_id": True})
                             history_id_list.append(eg_history_id.id)
+                        raise UserError(products_without_sku)
                         if default_product_id:
                             break
                         else:
