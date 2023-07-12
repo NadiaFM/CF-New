@@ -57,6 +57,8 @@ class ProductTemplate(models.Model):
         text = ""
         partial = False
         history_id_list = []
+        created_product_count = 0  # Counter variable for created products
+
         if instance_id:
             shop_connection = self.get_connection_from_shopify(instance_id=instance_id)
             # raise UserError(str(default_product_id))
@@ -84,116 +86,117 @@ class ProductTemplate(models.Model):
                         else:
                             product_list = response
                         # raise UserError(product_list)
-                        
+
                         for product in product_list:
+                            if created_product_count >= 5:  # Check if 5 products are already created
+                                break
+
                             product = product.to_dict()  # convert into dictionary
                             product_template_id = None
                             is_variant = True
                             eg_product_template_id = None
                             eg_product_tmpl_id = self.env["eg.product.template"].search(
                                 [("inst_product_tmpl_id", "=", str(product.get("id"))),
-                                 ("instance_id", "=", instance_id.id),("company_id","=",instance_id.company_id.id)])
-                            if (not eg_product_tmpl_id) or (eg_product_tmpl_id and (not eg_product_tmpl_id.odoo_product_tmpl_id)):
+                                ("instance_id", "=", instance_id.id), ("company_id", "=", instance_id.company_id.id)])
+                            if (not eg_product_tmpl_id) or (
+                                    eg_product_tmpl_id and (not eg_product_tmpl_id.odoo_product_tmpl_id)):
                                 sku = product.get("variants")[0].get("barcode")
                                 if not sku:
                                     continue
-                                #Asir - appending company with sku
-                                product_id = self.env["product.product"].search([("default_code", "=", sku),("company_id.id", "=", instance_id.company_id.id)])
+                                # Asir - appending company with sku
+                                product_id = self.env["product.product"].search(
+                                    [("default_code", "=", sku), ("company_id.id", "=", instance_id.company_id.id)])
                                 product_tmpl_id = None
                                 eg_category_id = None
                                 if not product_id:
                                     option = product.get("options")[0]
                                     # raise UserError(str(option))
                                     attribute_line_list = []
-                                    
+
                                     # raise UserError("kuch bhi")
-                                    # if option.get("name") == "Title" and option.get("values")[0] == "Default Title":
-                                        
-
-                                    #     is_variant = False
-                                    #     for product_variant in product.get("variants"):
-
-
-
-                                    #         # Write weight unit
-                                    #         uom_category_id = self.env["uom.category"].search([("name", "=", "Weight")],
-                                    #                                                           limit=1)
-                                    #         uom_id = self.env["uom.uom"].search(
-                                    #             [("name", "in", ["kg", "KG"]),
-                                    #              ("category_id", "=", uom_category_id.id)], limit=1)
-                                    #         inst_uom_id = self.env["uom.uom"].search(
-                                    #             [("name", "=", product_variant.get("weight_unit")),
-                                    #              ("category_id", "=", uom_category_id.id)], limit=1)
-                                    #         weight = round(
-                                    #             inst_uom_id._compute_quantity(product_variant.get("weight"), uom_id), 2)
-
-                                    #         product_tmpl_id = self.create([{"name": product.get("title"),
-                                    #                                         "default_code": product_variant.get("barcode"),
-                                    #                                         "type": "product",
-                                    #                                         'source_name':"Shopify : "+instance_id.name,
-                                    #                                         'shopify_instance_id':instance_id.id,
-                                    #                                         'company_id':instance_id.company_id.id,
-                                    #                                         "standard_price": product_variant.get(
-                                    #                                             "compare_at_price") or 0,
-                                    #                                         "list_price": product_variant.get("price"),
-                                    #                                          'x_studio_shopify_id_1':"this",
-                                                                           
-                                    #                                         "weight": weight,
-                                    #                                         }]
-                                    #                                       )
-                                    #         eg_product_template_id = self.env["eg.product.template"].create(
-                                    #             {"inst_product_tmpl_id": str(product.get("id")),
-                                    #              "odoo_product_tmpl_id": product_tmpl_id.id,
-                                    #              "instance_id": instance_id.id,
-                                    #              "name": product_tmpl_id.name,
-                                    #              "price": product_tmpl_id.list_price,
-                                    #              "default_code": product_tmpl_id.default_code or "",
-                                    #              "weight": product_tmpl_id.weight,
-                                    #              "barcode": product_tmpl_id.barcode or "",
-                                    #              "update_required": False,
-                                    #              "company_id": instance_id.company_id.id,
-                                    #              "description": product.get("body_html"),
-                                    #              })
-                                    #         product_tmpl_id.company_id=instance_id.company_id.id
-                                    # else:
-                                    attribute_line_list = self.create_attribute_value_at_import(product=product,
-                                                                                                    instance_id=instance_id)
+                                    if option.get("name") == "Title" and option.get("values")[0] == "Default Title":
+                                        is_variant = False
+                                        for product_variant in product.get("variants"):
+                                    
+                                    
+                                            # Write weight unit
+                                            uom_category_id = self.env["uom.category"].search([("name", "=", "Weight")],
+                                                                                              limit=1)
+                                            uom_id = self.env["uom.uom"].search(
+                                                [("name", "in", ["kg", "KG"]),
+                                                 ("category_id", "=", uom_category_id.id)], limit=1)
+                                            inst_uom_id = self.env["uom.uom"].search(
+                                                [("name", "=", product_variant.get("weight_unit")),
+                                                 ("category_id", "=", uom_category_id.id)], limit=1)
+                                            weight = round(
+                                                inst_uom_id._compute_quantity(product_variant.get("weight"), uom_id), 2)
+                                    
+                                            product_tmpl_id = self.create([{"name": product.get("title"),
+                                                                            "default_code": product_variant.get("barcode"),
+                                                                            "type": "product",
+                                                                            'source_name': "Shopifyy : " + instance_id.name,
+                                                                            'shopify_instance_id': instance_id.id,
+                                                                            'company_id': instance_id.company_id.id,
+                                                                            "standard_price": product_variant.get(
+                                                                                "compare_at_price") or 0,
+                                                                            "list_price": product_variant.get("price"),
+                                                                            # 'x_studio_shopify_id_1': "this",
+                                    
+                                                                            "weight": weight,
+                                                                            }]
+                                                                          )
+                                            eg_product_template_id = self.env["eg.product.template"].create(
+                                                {"inst_product_tmpl_id": str(product.get("id")),
+                                                 "odoo_product_tmpl_id": product_tmpl_id.id,
+                                                 "instance_id": instance_id.id,
+                                                 "name": product_tmpl_id.name,
+                                                 "price": product_tmpl_id.list_price,
+                                                 "default_code": product_tmpl_id.default_code or "",
+                                                 "weight": product_tmpl_id.weight,
+                                                 "barcode": product_tmpl_id.barcode or "",
+                                                 "update_required": False,
+                                                 "company_id": instance_id.company_id.id,
+                                                 "description": product.get("body_html"),
+                                                 })
+                                            product_tmpl_id.company_id=instance_id.company_id.id
+                                    else:
+                                        attribute_line_list = self.create_attribute_value_at_import(product=product,
+                                                                                                instance_id=instance_id)
 
                                     if attribute_line_list:
-                                      
 
                                         product_tmpl_id = self.create([{"name": product.get("title"),
                                                                         "type": "product",
-                                                                        'source_name':"Shopify : "+instance_id.name,
+                                                                        'source_name': "Shopify : " + instance_id.name,
                                                                         # 'x_studio_shopify_id_1':"that",
-                                                        
-                                                                        'shopify_instance_id':instance_id.id,
-                                                                        'company_id':instance_id.company_id.id,
+
+                                                                        'shopify_instance_id': instance_id.id,
+                                                                        'company_id': instance_id.company_id.id,
                                                                         "attribute_line_ids": attribute_line_list[0]}])
 
                                         eg_product_template_id = self.env["eg.product.template"].create(
                                             {"inst_product_tmpl_id": str(product.get("id")),
-                                             "odoo_product_tmpl_id": product_tmpl_id.id,
-                                             "instance_id": instance_id.id,
-                                             "name": product_tmpl_id.name,
-                                             "price": product_tmpl_id.list_price,
-                                             "default_code": product_tmpl_id.default_code or "",
-                                             "weight": product_tmpl_id.weight,
-                                             "barcode": product_tmpl_id.barcode or "",
-                                             "company_id": instance_id.company_id.id,
-                                             "update_required": False,
-                                             "eg_attribute_line_ids": attribute_line_list[1],
-                                             "description": product.get("body_html"),
-                                             "eg_category_id": eg_category_id and eg_category_id.id or None,
-                                             })
-                                        product_tmpl_id.company_id=instance_id.company_id.id
+                                            "odoo_product_tmpl_id": product_tmpl_id.id,
+                                            "instance_id": instance_id.id,
+                                            "name": product_tmpl_id.name,
+                                            "price": product_tmpl_id.list_price,
+                                            "default_code": product_tmpl_id.default_code or "",
+                                            "weight": product_tmpl_id.weight,
+                                            "barcode": product_tmpl_id.barcode or "",
+                                            "company_id": instance_id.company_id.id,
+                                            "update_required": False,
+                                            "eg_attribute_line_ids": attribute_line_list[1],
+                                            "description": product.get("body_html"),
+                                            "eg_category_id": eg_category_id and eg_category_id.id or None,
+                                            })
+                                        product_tmpl_id.company_id = instance_id.company_id.id
 
                                 else:
                                     product_tmpl_id = product_id.product_tmpl_id
                                     create_mapping = self.create_product_variant_at_import(product=product,
-                                                                                           instance_id=instance_id,
-                                                                                           product_tmpl_id=product_tmpl_id,
-                                                                                           check_attribute=True)
+                                                                                        instance_id=instance_id,
+                                                                                        product_tmpl_id=product_tmpl_id,
+                                                                                        check_attribute=True)
                                     if create_mapping:
                                         attribute_line_list = self.create_attribute_value_at_import(product=product,
                                                                                                     instance_id=instance_id,
@@ -201,29 +204,30 @@ class ProductTemplate(models.Model):
 
                                         eg_product_template_id = self.env["eg.product.template"].create(
                                             {"inst_product_tmpl_id": str(product.get("id")),
-                                             "odoo_product_tmpl_id": product_tmpl_id.id,
-                                             "instance_id": instance_id.id,
-                                             "name": product_tmpl_id.name,
-                                             "price": product_tmpl_id.list_price,
-                                             "default_code": product_tmpl_id.default_code or "",
-                                             "weight": product_tmpl_id.weight,
-                                             "barcode": product_tmpl_id.barcode or "",
-                                             "company_id": instance_id.company_id.id,
-                                             "update_required": False,
-                                             "eg_attribute_line_ids": attribute_line_list[1],
-                                             "description": product.get("body_html"),
-                                             "eg_category_id": eg_category_id and eg_category_id.id or None
-                                             })
-                                        product_tmpl_id.company_id=instance_id.company_id.id
+                                            "odoo_product_tmpl_id": product_tmpl_id.id,
+                                            "instance_id": instance_id.id,
+                                            "name": product_tmpl_id.name,
+                                            "price": product_tmpl_id.list_price,
+                                            "default_code": product_tmpl_id.default_code or "",
+                                            "weight": product_tmpl_id.weight,
+                                            "barcode": product_tmpl_id.barcode or "",
+                                            "company_id": instance_id.company_id.id,
+                                            "update_required": False,
+                                            "eg_attribute_line_ids": attribute_line_list[1],
+                                            "description": product.get("body_html"),
+                                            "eg_category_id": eg_category_id and eg_category_id.id or None
+                                            })
+                                        product_tmpl_id.company_id = instance_id.company_id.id
                                         create_variant = self.create_product_variant_at_import(product=product,
-                                                                                               instance_id=instance_id,
-                                                                                               product_tmpl_id=product_tmpl_id,
-                                                                                               eg_product_template_id=eg_product_template_id,
-                                                                                               check_attribute_create_mapping=True,
-                                                                                               eg_category_id=eg_category_id)
+                                                                                            instance_id=instance_id,
+                                                                                            product_tmpl_id=product_tmpl_id,
+                                                                                            eg_product_template_id=eg_product_template_id,
+                                                                                            check_attribute_create_mapping=True,
+                                                                                            eg_category_id=eg_category_id)
                                         status = "yes"
                                         text = "This product was successfully created and mapped"
                                         product_template_id = product_tmpl_id
+                                        created_product_count += 1  # Increment the created product count
                                     else:
                                         text = "This odoo product {} is  not same attribute and value for shopify product so it is not mapping".format(
                                             product_id.name)
@@ -236,14 +240,15 @@ class ProductTemplate(models.Model):
                                 if not product_id:
                                     if eg_product_template_id:
                                         create_variant = self.create_product_variant_at_import(product=product,
-                                                                                               instance_id=instance_id,
-                                                                                               product_tmpl_id=product_tmpl_id,
-                                                                                               eg_product_template_id=eg_product_template_id,
-                                                                                               eg_category_id=eg_category_id)
+                                                                                            instance_id=instance_id,
+                                                                                            product_tmpl_id=product_tmpl_id,
+                                                                                            eg_product_template_id=eg_product_template_id,
+                                                                                            eg_category_id=eg_category_id)
 
                                         status = "yes"
                                         text = "This product was successfully created and mapped"
                                         product_template_id = product_tmpl_id
+                                        created_product_count += 1  # Increment the created product count
                                     else:
                                         partial = True
                                         status = "no"
@@ -289,6 +294,7 @@ class ProductTemplate(models.Model):
                                                             "parent_id": True,
                                                             "eg_history_ids": [(6, 0, history_id_list)]})
         return True
+
 
     def get_connection_from_shopify(self, instance_id=None):
         shop_url = "https://{}:{}@{}.myshopify.com/admin/api/{}".format(instance_id.shopify_api_key,
