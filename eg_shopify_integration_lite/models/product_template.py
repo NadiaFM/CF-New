@@ -3,6 +3,7 @@ from odoo import models, fields, api
 from odoo.exceptions import Warning, UserError
 import base64
 import requests
+import time
 try:
     import shopify
 except ImportError:
@@ -73,9 +74,9 @@ class ProductTemplate(models.Model):
                             response = shopify.Product.find(default_product_id)
                         else:
                             if next_page_url:
-                                response = shopify.Product.find(from_=next_page_url)
+                                response = shopify.Product.find(from_=next_page_url, limit=50) 
                             else:
-                                response = shopify.Product.find(limit=250)
+                                response = shopify.Product.find(limit=50)
 
                     except Exception as e:
                         raise Warning("{}".format(e))
@@ -278,6 +279,7 @@ class ProductTemplate(models.Model):
                                                                                 "child_id": True})
                             history_id_list.append(eg_history_id.id)
                         # raise UserError(products_without_sku)
+                        time.sleep(1) 
                         if default_product_id:
                             break
                         else:
