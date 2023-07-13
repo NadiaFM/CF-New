@@ -74,7 +74,7 @@ class ProductTemplate(models.Model):
                             response = shopify.Product.find(default_product_id)
                         else:
                             if next_page_url:
-                                response = shopify.Product.find(from_=next_page_url, limit=5) 
+                                response = shopify.Product.find(from_=next_page_url) 
                             else:
                                 response = shopify.Product.find(limit=5)
 
