@@ -58,7 +58,7 @@ class ProductTemplate(models.Model):
         partial = False
         history_id_list = []
         products_without_sku=[]
-        # created_product_count = 0  # Counter variable for created products
+        created_product_count = 0  # Counter variable for created products
 
         if instance_id:
             shop_connection = self.get_connection_from_shopify(instance_id=instance_id)
@@ -89,8 +89,8 @@ class ProductTemplate(models.Model):
                         # raise UserError(product_list)
 
                         for product in product_list:
-                        #     if created_product_count >= 10:  # Check if 5 products are already created
-                        #         break
+                            if created_product_count >= 5:  # Check if 5 products are already created
+                                break
 
                             product = product.to_dict()  # convert into dictionary
                             product_template_id = None
@@ -236,7 +236,7 @@ class ProductTemplate(models.Model):
                                         status = "yes"
                                         text = "This product was successfully created and mapped"
                                         product_template_id = product_tmpl_id
-                                        # created_product_count += 1  # Increment the created product count
+                                        created_product_count += 1  # Increment the created product count
                                     else:
                                         text = "This odoo product {} is  not same attribute and value for shopify product so it is not mapping".format(
                                             product_id.name)
@@ -257,7 +257,7 @@ class ProductTemplate(models.Model):
                                         status = "yes"
                                         text = "This product was successfully created and mapped"
                                         product_template_id = product_tmpl_id
-                                        # created_product_count += 1  # Increment the created product count
+                                        created_product_count += 1  # Increment the created product count
                                     else:
                                         partial = True
                                         status = "no"
@@ -277,7 +277,7 @@ class ProductTemplate(models.Model):
                                                                                 "product_id": product_template_id and product_template_id.id or None,
                                                                                 "child_id": True})
                             history_id_list.append(eg_history_id.id)
-                        raise UserError(products_without_sku)
+                        # raise UserError(products_without_sku)
                         if default_product_id:
                             break
                         else:
