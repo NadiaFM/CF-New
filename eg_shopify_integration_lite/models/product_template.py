@@ -88,7 +88,7 @@ class ProductTemplate(models.Model):
                             product_list = response
                         # raise UserError(product_list)
 
-                        # for product in product_list:
+                        for product in product_list:
                         #     if created_product_count >= 10:  # Check if 5 products are already created
                         #         break
 
