@@ -89,7 +89,7 @@ class ProductTemplate(models.Model):
                         # raise UserError(product_list)
 
                         for product in product_list:
-                            if created_product_count >= 5:  # Check if 5 products are already created
+                            if created_product_count >= 20:  # Check if 5 products are already created
                                 break
 
                             product = product.to_dict()  # convert into dictionary
