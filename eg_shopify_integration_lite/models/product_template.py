@@ -89,7 +89,7 @@ class ProductTemplate(models.Model):
                         # raise UserError(product_list)
 
                         for product in product_list:
-                             
+                            sku = product.get("variants")[0].get("barcode")
                             product_id = self.env["product.product"].search(
                                     [("default_code", "=", sku), ("company_id.id", "=", instance_id.company_id.id)])
                             if not product_id and created_product_count >= 20:  # Check if 5 products are already created
