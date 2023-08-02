@@ -52,6 +52,7 @@ class MessengerIntegrationController(http.Controller):
         # data = json.loads(request.httprequest.data)
         # self.log(data)
         # return Response('Ok', status=200)
+        return "Hello World"
         data = request.httprequest.data
         body = json.loads(data.decode('utf-8'))
         if 'object' in body and body['object'] == 'page':
