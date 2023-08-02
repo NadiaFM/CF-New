@@ -25,9 +25,12 @@ class MessengerIntegrationController(http.Controller):
         # # return http.Response(json.dumps(response_data), status=200, content_type='application/json')
         # Parse the query params
         
-        mode = kw.get('hub.mode')
-        token = kw.get('hub.verify_token')
-        challenge = kw.get('hub.challenge')
+        # mode = kw.get('hub.mode')
+        # token = kw.get('hub.verify_token')
+        # challenge = kw.get('hub.challenge')
+        mode = http.request.params.get('hub.mode')
+        token = http.request.params.get('hub.verify_token')
+        challenge = http.request.params.get('hub.challenge')
         # raise UserError(mode)
         # _logger.info(str(webhookEvent))
 
