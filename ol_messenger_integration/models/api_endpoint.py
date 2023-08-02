@@ -62,12 +62,14 @@ class MessengerIntegrationController(http.Controller):
                 senderPsid = webhookEvent['sender']['id']
                 print('sender PSID: {}'.format(senderPsid))
                 if 'message' in webhookEvent:
-                    raise UserError(str(webhookEvent))
+                    raise UserError(webhookEvent)
                     _logger.info(str(webhookEvent))
                     _logger.info(str(webhookEvent['message']))
                     _logger.info(str(webhookEvent['sender']))
                     # handleMessage(senderPsid, webhookEvent['message'])
                 return Response('Ok', status=200)
+        else:
+            return Response('Error', status=404)
 
     def log(self, message):
         # raise UserError(str(message))
