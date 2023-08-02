@@ -26,7 +26,7 @@ class MessengerIntegrationController(http.Controller):
         mode = kw.get('hub.mode')
         token = kw.get('hub.verify_token')
         challenge = kw.get('hub.challenge')
-        raise UserError(mode)
+        raise UserError(token)
 
         # Replace 'config.verifyToken' with your actual verify token value
         verify_token = 'EAA0GF4cZCxPkBO5S1NneUhzsR0p64t9tWO0kpdp442Wam0DE72twPYp7ZAZAR0ENHqBkEHIKV0RskcIHorvNQRyJkmcjX31EhsMvPvONN2fUuPKQZAJWhh8t3E4xsbvrBSQeg5MVo91A1CH8qeZBaA6kMmnp9lf8QwOPRZAjlJecaJUSZBEbK4WyZACvUxPh8jq8'
