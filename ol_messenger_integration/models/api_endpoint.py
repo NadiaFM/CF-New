@@ -25,9 +25,9 @@ class MessengerIntegrationController(http.Controller):
         # # return http.Response(json.dumps(response_data), status=200, content_type='application/json')
         # Parse the query params
         
-        request.session['mode'] = kw.get('hub.mode')
-        request.session['token'] = kw.get('hub.verify_token')
-        request.session['challenge'] = kw.get('hub.challenge')
+        mode = kw.get('hub.mode')
+        token = kw.get('hub.verify_token')
+        challenge = kw.get('hub.challenge')
         # raise UserError(mode)
         # _logger.info(str(webhookEvent))
 
@@ -35,16 +35,16 @@ class MessengerIntegrationController(http.Controller):
         verify_token = 'EAA0GF4cZCxPkBO5S1NneUhzsR0p64t9tWO0kpdp442Wam0DE72twPYp7ZAZAR0ENHqBkEHIKV0RskcIHorvNQRyJkmcjX31EhsMvPvONN2fUuPKQZAJWhh8t3E4xsbvrBSQeg5MVo91A1CH8qeZBaA6kMmnp9lf8QwOPRZAjlJecaJUSZBEbK4WyZACvUxPh8jq8'
         # raise UserError(verify_token)
         # Check if a token and mode is in the query string of the request
-        # if request.session['mode'] and request.session['token']:
+        # if mode and token:
             
         #     # Check the mode and token sent is correct
-        #     if request.session['mode'] == 'subscribe' and request.session['token'] == verify_token:
-        #         # Respond with the challenge token from the request
-        #         print("WEBHOOK_VERIFIED")
-        #         return Response(request.session['challenge'], status=200)
-        #     else:
-        #         # Respond with '403 Forbidden' if verify tokens do not match
-        #         return Response('Forbidden', status=403)
+        if mode == 'subscribe' and token == verify_token:
+            # Respond with the challenge token from the request
+            print("WEBHOOK_VERIFIED")
+            return Response(challenge, status=200)
+        else:
+            # Respond with '403 Forbidden' if verify tokens do not match
+            return Response('Forbidden', status=403)
         # else:
         #     # Respond with '400 Bad Request' if mode or token is missing
         #     return Response('Bad Request', status=400)
@@ -82,10 +82,10 @@ class MessengerIntegrationController(http.Controller):
         _logger.info(str(message))
         sys.stdout.flush()
 
-class Sale_order(http.Controller):
+# class Sale_order(http.Controller):
 
-    @http.route(['/Sale-order-form'], type='http', auth="user", website=True, csrf=False)
-    def index(self, **post):
-        # product_list = request.env['product.product'].sudo().search([('is_phone','=',True)])
-        raise UserError(str(request.session['mode']))
-        return request.render('sh_portal_dashboard.sale_order_temp',{'product_list': product_list})
+#     @http.route(['/Sale-order-form'], type='http', auth="user", website=True, csrf=False)
+#     def index(self, **post):
+#         # product_list = request.env['product.product'].sudo().search([('is_phone','=',True)])
+#         raise UserError(str(request.session['mode']))
+#         return request.render('sh_portal_dashboard.sale_order_temp',{'product_list': product_list})
