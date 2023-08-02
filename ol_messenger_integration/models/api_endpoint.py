@@ -29,7 +29,7 @@ class MessengerIntegrationController(http.Controller):
 
         # Replace 'config.verifyToken' with your actual verify token value
         verify_token = 'EAA0GF4cZCxPkBO5S1NneUhzsR0p64t9tWO0kpdp442Wam0DE72twPYp7ZAZAR0ENHqBkEHIKV0RskcIHorvNQRyJkmcjX31EhsMvPvONN2fUuPKQZAJWhh8t3E4xsbvrBSQeg5MVo91A1CH8qeZBaA6kMmnp9lf8QwOPRZAjlJecaJUSZBEbK4WyZACvUxPh8jq8'
-        raise UserError(verify_token)
+        # raise UserError(verify_token)
         # Check if a token and mode is in the query string of the request
         if mode and token:
             # Check the mode and token sent is correct
