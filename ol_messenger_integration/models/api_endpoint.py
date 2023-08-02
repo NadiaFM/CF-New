@@ -11,7 +11,7 @@ _logger = logging.getLogger(__name__)
 class MessengerIntegrationController(http.Controller):
 
     # @http.route('/', type='http', auth='public', website=True, csrf=False)
-    @http.route('/messenger_integration', type='http', auth='public', website=True, csrf=False)
+    @http.route('/messenger_integration', type='http', auth='public',methods=['Get'], website=True, csrf=False)
     def verify(self, **kw):
         # # webhook verification
         # if kwargs.get("hub.mode") == "subscribe" and kwargs.get("hub.challenge"):
@@ -49,9 +49,25 @@ class MessengerIntegrationController(http.Controller):
     @http.route('/', type='json', auth='public', methods=['POST'], csrf=False)
     @http.route('/messenger_integration', type='json', auth='public', methods=['POST'], csrf=False)
     def webhook(self, **kwargs):
-        data = json.loads(request.httprequest.data)
-        self.log(data)
-        return Response('Ok', status=200)
+        # data = json.loads(request.httprequest.data)
+        # self.log(data)
+        # return Response('Ok', status=200)
+        data = request.httprequest.data
+        body = json.loads(data.decode('utf-8'))
+        if 'object' in body and body['object'] == 'page':
+            entries = body['entry']
+            for entry in entries:
+                webhookEvent = entry['messaging'][0]
+                print(webhookEvent)
+                senderPsid = webhookEvent['sender']['id']
+                print('sender PSID: {}'.format(senderPsid))
+                if 'message' in webhookEvent:
+                    raise UserError(str(webhookEvent))
+                    _logger.info(str(webhookEvent))
+                    _logger.info(str(webhookEvent['message']))
+                    _logger.info(str(webhookEvent['sender']))
+                    # handleMessage(senderPsid, webhookEvent['message'])
+                return Response('Ok', status=200)
 
     def log(self, message):
         # raise UserError(str(message))
