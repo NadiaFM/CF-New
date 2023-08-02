@@ -42,7 +42,7 @@ class MessengerIntegrationController(http.Controller):
                 return Response('Forbidden', status=403)
         else:
             # Respond with '400 Bad Request' if mode or token is missing
-            return Response('Bad Request', status=400)
+            return Response('Bad ', status=400)
 
 
 
