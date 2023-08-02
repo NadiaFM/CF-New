@@ -11,7 +11,7 @@ _logger = logging.getLogger(__name__)
 class MessengerIntegrationController(http.Controller):
 
     # @http.route('/', type='http', auth='public', website=True, csrf=False)
-    @http.route('/messenger_integration',  type='http',auth='public', website=True,csrf=False)
+    @http.route('/messenger_integration',  type='http', methods=['GET'],auth='public', website=True,csrf=False)
     def verify(self, **kw):
         # # webhook verification
         # if kwargs.get("hub.mode") == "subscribe" and kwargs.get("hub.challenge"):
