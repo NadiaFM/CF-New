@@ -1,0 +1,10 @@
+<odoo>
+    <template id="messenger_integration" name="messenger_integration">
+        <t t-call="website.layout">
+
+        </t>
+
+    </template>
+
+
+</odoo>
