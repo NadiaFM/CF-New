@@ -11,9 +11,8 @@ _logger = logging.getLogger(__name__)
 class MessengerIntegrationController(http.Controller):
 
     # @http.route('/', type='http', auth='public', website=True, csrf=False)
-    @http.route('/messenger_integration',  auth='public', website=True)
+    @http.route('/messenger_integration',  type='http',auth='public', website=True,csrf=False)
     def verify(self, **kw):
-        return "Hello World"
         # # webhook verification
         # if kwargs.get("hub.mode") == "subscribe" and kwargs.get("hub.challenge"):
         #     if not kwargs.get("hub.verify_token") == "hello":
@@ -53,14 +52,13 @@ class MessengerIntegrationController(http.Controller):
         # data = json.loads(request.httprequest.data)
         # self.log(data)
         # return Response('Ok', status=200)
-        return "Hello World"
         data = request.httprequest.data
         body = json.loads(data.decode('utf-8'))
         if 'object' in body and body['object'] == 'page':
             entries = body['entry']
             for entry in entries:
                 webhookEvent = entry['messaging'][0]
-                print(webhookEvent)
+                return str(webhookEvent)
                 senderPsid = webhookEvent['sender']['id']
                 print('sender PSID: {}'.format(senderPsid))
                 if 'message' in webhookEvent:
