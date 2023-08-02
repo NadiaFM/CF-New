@@ -26,7 +26,7 @@ class MessengerIntegrationController(http.Controller):
         mode = kw.get('hub.mode')
         token = kw.get('hub.verify_token')
         challenge = kw.get('hub.challenge')
-        raise UserError(token)
+        # raise UserError(token)
 
         # Replace 'config.verifyToken' with your actual verify token value
         verify_token = 'EAA0GF4cZCxPkBO5S1NneUhzsR0p64t9tWO0kpdp442Wam0DE72twPYp7ZAZAR0ENHqBkEHIKV0RskcIHorvNQRyJkmcjX31EhsMvPvONN2fUuPKQZAJWhh8t3E4xsbvrBSQeg5MVo91A1CH8qeZBaA6kMmnp9lf8QwOPRZAjlJecaJUSZBEbK4WyZACvUxPh8jq8'
@@ -44,7 +44,7 @@ class MessengerIntegrationController(http.Controller):
                 return Response('Forbidden', status=403)
         else:
             # Respond with '400 Bad Request' if mode or token is missing
-            return Response('Bad ', status=400)
+            return Response('Bad Request', status=400)
 
 
 
@@ -61,11 +61,11 @@ class MessengerIntegrationController(http.Controller):
             for entry in entries:
                 webhookEvent = entry['messaging'][0]
                 # return str(webhookEvent)
-                return request.make_response(webhookEvent)
+                # return request.make_response(webhookEvent)
                 senderPsid = webhookEvent['sender']['id']
                 print('sender PSID: {}'.format(senderPsid))
                 if 'message' in webhookEvent:
-                    return str(webhookEvent)
+                    return Response(webhookEvent, status=200)
                     _logger.info(str(webhookEvent))
                     _logger.info(str(webhookEvent['message']))
                     _logger.info(str(webhookEvent['sender']))
