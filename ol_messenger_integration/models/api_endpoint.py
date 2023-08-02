@@ -31,7 +31,7 @@ class MessengerIntegrationController(http.Controller):
         mode = http.request.params.get('hub.mode')
         token = http.request.params.get('hub.verify_token')
         challenge = http.request.params.get('hub.challenge')
-        # raise UserError(mode)
+        raise UserError(mode)
         # _logger.info(str(webhookEvent))
 
         # Replace 'config.verifyToken' with your actual verify token value
