@@ -35,19 +35,19 @@ class MessengerIntegrationController(http.Controller):
         verify_token = 'EAA0GF4cZCxPkBO5S1NneUhzsR0p64t9tWO0kpdp442Wam0DE72twPYp7ZAZAR0ENHqBkEHIKV0RskcIHorvNQRyJkmcjX31EhsMvPvONN2fUuPKQZAJWhh8t3E4xsbvrBSQeg5MVo91A1CH8qeZBaA6kMmnp9lf8QwOPRZAjlJecaJUSZBEbK4WyZACvUxPh8jq8'
         # raise UserError(verify_token)
         # Check if a token and mode is in the query string of the request
-        if request.session['mode'] and request.session['token']:
+        # if request.session['mode'] and request.session['token']:
             
-            # Check the mode and token sent is correct
-            if request.session['mode'] == 'subscribe' and request.session['token'] == verify_token:
-                # Respond with the challenge token from the request
-                print("WEBHOOK_VERIFIED")
-                return Response(request.session['challenge'], status=200)
-            else:
-                # Respond with '403 Forbidden' if verify tokens do not match
-                return Response('Forbidden', status=403)
-        else:
-            # Respond with '400 Bad Request' if mode or token is missing
-            return Response('Bad Request', status=400)
+        #     # Check the mode and token sent is correct
+        #     if request.session['mode'] == 'subscribe' and request.session['token'] == verify_token:
+        #         # Respond with the challenge token from the request
+        #         print("WEBHOOK_VERIFIED")
+        #         return Response(request.session['challenge'], status=200)
+        #     else:
+        #         # Respond with '403 Forbidden' if verify tokens do not match
+        #         return Response('Forbidden', status=403)
+        # else:
+        #     # Respond with '400 Bad Request' if mode or token is missing
+        #     return Response('Bad Request', status=400)
 
 
 
