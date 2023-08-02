@@ -13,6 +13,7 @@ class MessengerIntegrationController(http.Controller):
     # @http.route('/', type='http', auth='public', website=True, csrf=False)
     @http.route('/messenger_integration',  type='http', methods=['GET'],auth='public', website=True,csrf=False)
     def verify(self, **kw):
+        
         # # webhook verification
         # if kwargs.get("hub.mode") == "subscribe" and kwargs.get("hub.challenge"):
         #     if not kwargs.get("hub.verify_token") == "hello":
@@ -23,22 +24,24 @@ class MessengerIntegrationController(http.Controller):
 
         # # return http.Response(json.dumps(response_data), status=200, content_type='application/json')
         # Parse the query params
-        mode = kw.get('hub.mode')
-        token = kw.get('hub.verify_token')
-        challenge = kw.get('hub.challenge')
-        raise UserError(mode)
+        
+        request.session['mode'] = kw.get('hub.mode')
+        request.session['token'] = kw.get('hub.verify_token')
+        request.session['challenge'] = kw.get('hub.challenge')
+        # raise UserError(mode)
+        # _logger.info(str(webhookEvent))
 
         # Replace 'config.verifyToken' with your actual verify token value
         verify_token = 'EAA0GF4cZCxPkBO5S1NneUhzsR0p64t9tWO0kpdp442Wam0DE72twPYp7ZAZAR0ENHqBkEHIKV0RskcIHorvNQRyJkmcjX31EhsMvPvONN2fUuPKQZAJWhh8t3E4xsbvrBSQeg5MVo91A1CH8qeZBaA6kMmnp9lf8QwOPRZAjlJecaJUSZBEbK4WyZACvUxPh8jq8'
         # raise UserError(verify_token)
         # Check if a token and mode is in the query string of the request
-        if mode and token:
+        if request.session['mode'] and request.session['token']:
             
             # Check the mode and token sent is correct
-            if mode == 'subscribe' and token == verify_token:
+            if request.session['mode'] == 'subscribe' and request.session['token'] == verify_token:
                 # Respond with the challenge token from the request
                 print("WEBHOOK_VERIFIED")
-                return Response(challenge, status=200)
+                return Response(request.session['challenge'], status=200)
             else:
                 # Respond with '403 Forbidden' if verify tokens do not match
                 return Response('Forbidden', status=403)
@@ -78,3 +81,11 @@ class MessengerIntegrationController(http.Controller):
         # raise UserError(str(message))
         _logger.info(str(message))
         sys.stdout.flush()
+
+class Sale_order(http.Controller):
+
+    @http.route(['/Sale-order-form'], type='http', auth="user", website=True, csrf=False)
+    def index(self, **post):
+        # product_list = request.env['product.product'].sudo().search([('is_phone','=',True)])
+        raise UserError(str(request.session['mode']))
+        return request.render('sh_portal_dashboard.sale_order_temp',{'product_list': product_list})
