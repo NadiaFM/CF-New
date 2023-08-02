@@ -32,6 +32,7 @@ class MessengerIntegrationController(http.Controller):
         # raise UserError(verify_token)
         # Check if a token and mode is in the query string of the request
         if mode and token:
+            raise UserError(mode)
             # Check the mode and token sent is correct
             if mode == 'subscribe' and token == verify_token:
                 # Respond with the challenge token from the request
