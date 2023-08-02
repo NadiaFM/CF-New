@@ -58,7 +58,8 @@ class MessengerIntegrationController(http.Controller):
             entries = body['entry']
             for entry in entries:
                 webhookEvent = entry['messaging'][0]
-                return str(webhookEvent)
+                # return str(webhookEvent)
+                return request.make_response(webhookEvent)
                 senderPsid = webhookEvent['sender']['id']
                 print('sender PSID: {}'.format(senderPsid))
                 if 'message' in webhookEvent:
