@@ -11,7 +11,7 @@ class WebhookController(http.Controller):
             # Handle the webhook verification
             verify_token = post.get('hub.verify_token')
             hub_challenge = post.get('hub.challenge')
-            if verify_token == 'YOUR_VERIFY_TOKEN':
+            if verify_token == 'hello':
                 return Response(hub_challenge, content_type='text/plain', status=200)
             else:
                 return Response("Invalid verify token", content_type='text/plain', status=403)
