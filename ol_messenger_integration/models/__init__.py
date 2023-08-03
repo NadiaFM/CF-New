@@ -1,2 +1,2 @@
 # from . import api_endpoint
-from . import api_end
+from . import api_point
