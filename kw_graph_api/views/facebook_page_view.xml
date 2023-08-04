@@ -1,0 +1,100 @@
+<odoo>
+    <record id="kw_graph_api_kw_facebook_page_search" model="ir.ui.view">
+        <field name="name">kw.facebook.page.search (kw_graph_api)</field>
+        <field name="model">kw.facebook.page</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="net_object"/>
+                <field name="page_id"/>
+                <searchpanel>
+                    <field
+                        name="net_object"
+                        select="multi"
+                        string="Networks"
+                        icon="fa-tag"
+                        enable_counters="1"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="kw_graph_api_kw_facebook_page_tree">
+        <field name="name">kw.facebook.page.tree (kw_graph_api)</field>
+        <field name="model">kw.facebook.page</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="net_object"/>
+                <field name="page_id"/>
+                <field name="facebook_app_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="kw_graph_api_kw_facebook_page_form">
+        <field name="name">kw.facebook.page.form (kw_graph_api)</field>
+        <field name="model">kw.facebook.page</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button type="object" class="btn btn-primary"
+                            name="resubscribe_page"
+                            string="Resubscribe"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Archived"
+                            bg_color="bg-danger"
+                            attrs="{'invisible': [('active', '=', True)]}"/>
+                    <field name="active" invisible="1"/>
+                    <div name="title_line" style="width: 100%">
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                    </div>
+                    <group>
+                        <field name="net_object"/>
+                        <field name="is_facebook_webhook" invisible="1"/>
+                        <field name="page_webhook_token" invisible="1"/>
+                        <field name="instagram_webhook_token" invisible="1"/>
+                        <field name="facebook_app_id"/>
+<!--                        <field name="is_developer_mode" groups="kw_graph_api.group_kw_facebook_admin"/>-->
+                         <field name="is_developer_mode"/>
+                        <field name="page_id" attrs="{'invisible': [('is_developer_mode', '=', False)]}"/>
+                        <field name="access_token" attrs="{'invisible': [('is_developer_mode', '=', False)]}"/>
+                    </group>
+                    <notebook>
+                        <page string="Settings">
+                            <group string="CRM">
+                                <group>
+                                    <field name="crm_user_id"/>
+                                    <field name="crm_team_id"/>
+                                    <field name="crm_type"/>
+                                    <field name="crm_medium_id"/>
+                                    <field name="crm_source_id"/>
+                                    <field name="crm_name_prefix"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="kw_graph_api_kw_facebook_page_action_window"
+            model="ir.actions.act_window">
+        <field name="name">Facebook Page</field>
+        <field name="res_model">kw.facebook.page</field>
+        <field name="view_mode">tree,form,search</field>
+    </record>
+
+    <menuitem id="kw_facebook_pages_menu"
+              parent="kw_facebook_main_menu"
+              groups="kw_graph_api.group_kw_facebook_user"
+              action="kw_graph_api_kw_facebook_page_action_window"
+              name="Pages" sequence="100"/>
+
+</odoo>
