@@ -13,7 +13,7 @@ class MessengerIntegrationController(http.Controller):
     # @http.route('/', type='http', auth='public', website=True, csrf=False)
     @http.route('/messenger_integration',  type='http', methods=['GET'],auth='public', website=True,csrf=False)
     def verify(self, **kw):
-        raise UserError("hey")
+        # raise UserError("hey")
         
         # # webhook verification
         # if kwargs.get("hub.mode") == "subscribe" and kwargs.get("hub.challenge"):
@@ -36,7 +36,7 @@ class MessengerIntegrationController(http.Controller):
         # _logger.info(str(webhookEvent))
 
         # Replace 'config.verifyToken' with your actual verify token value
-        verify_token = 'hello'
+        verify_token = 'integration'
         # raise UserError(verify_token)
         # Check if a token and mode is in the query string of the request
         # if mode and token:
