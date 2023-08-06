@@ -11,7 +11,7 @@ _logger = logging.getLogger(__name__)
 class MessengerIntegrationController(http.Controller):
 
     # @http.route('/', type='http', auth='public', website=True, csrf=False)
-    @http.route('/messenger_integration',  type='http', methods=['GET'],auth='public', website=True,csrf=False)
+    @http.route('/get_message_from_facebook',  type='http', methods=['GET'],auth='public', website=True,csrf=False)
     def verify(self, **kw):
         # raise UserError("hey")
         
@@ -56,7 +56,7 @@ class MessengerIntegrationController(http.Controller):
 
 
     # @http.route('/', type='json', auth='public', methods=['POST'], csrf=False)
-    @http.route('/messenger_integration', type='json', auth='public', methods=['POST'], csrf=False)
+    @http.route('/get_message_from_facebook', type='json', auth='public', methods=['POST'], csrf=False)
     def webhook(self, **kwargs):
         # data = json.loads(request.httprequest.data)
         # self.log(data)
