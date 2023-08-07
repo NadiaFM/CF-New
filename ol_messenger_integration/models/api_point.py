@@ -10,7 +10,7 @@ class WebhookController(http.Controller):
         if request.httprequest.method == 'GET':
             # Handle the webhook verification
             verify_token = post.get('hub.verify_token')
-            _logger.info(str(webhookEvent))
+            # _logger.info(str(webhookEvent))
             # return Response(post.get('hub.verify_token'), content_type='text/plain', status=200)
             hub_challenge = post.get('hub.challenge')
             if verify_token == 'hello':
