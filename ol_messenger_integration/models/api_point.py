@@ -13,7 +13,7 @@ class WebhookController(http.Controller):
             # _logger.info(str(webhookEvent))
             # return Response(post.get('hub.verify_token'), content_type='text/plain', status=200)
             hub_challenge = post.get('hub.challenge')
-            if verify_token == 'hello':
+            if verify_token == 'EAAOmiWyLQB0BO4BZBPXlAJqFaAVIp65FYuiHkRKFpNwxsZAWuKQ8LzPD1ZCS8n0HzrcNuIPCwVDELbQFlCVqxtagtPOxZBP4K9MNsjcZCfUsex4om4zZCT6GseENWD5R83up1DxP8z6qOZAsGGi7tUoL5mk6QlfvOZCMl6zDyHGZBTSe0BCH9l9ZBT55DSXVhZB':
             # if verify_token == verify_token:
 
                 return Response(hub_challenge, content_type='text/plain', status=200)
