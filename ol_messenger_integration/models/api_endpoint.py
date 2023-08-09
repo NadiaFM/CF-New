@@ -42,8 +42,8 @@ class MessengerIntegrationController(http.Controller):
                 if 'message' in webhookEvent:
                    
                     _logger.info(str(webhookEvent))
-                    _logger.info(str(webhookEvent['message']))
-                    _logger.info(str(webhookEvent['sender']))
+                    # _logger.info(str(webhookEvent['message']))
+                    # _logger.info(str(webhookEvent['sender']))
 
             # Return a successful response (200 status code) to Facebook, as it expects a 200 response for successful handling of the webhook.
             return Response('Ok', status=200)
