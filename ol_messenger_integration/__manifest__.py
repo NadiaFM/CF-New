@@ -10,7 +10,7 @@
     "version": "15.0.1",
 
     "depends": [
-        'stock'
+        'stock', 'base',
     ],
 
     "data": [

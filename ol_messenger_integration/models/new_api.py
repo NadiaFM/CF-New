@@ -9,11 +9,10 @@ import base64
 from odoo import models, fields
 
 class WebhookData(models.Model):
-    _name = 'ol_messenger_integration.webhook_data'
-    _description = 'Webhook Data'
+    _inherit = 'res.partner'
 
-    sender = fields.Char(string='Sender')
-    message = fields.Char(string='Message')
+    sender_id = fields.Char(string='Sender ID')
+    # message = fields.Char(string='Message')
 
 _logger = logging.getLogger(__name__)
 
@@ -61,16 +60,23 @@ class WebhookController(http.Controller):
                     pic_url = sender_data['picture']['data']['url']
                     image_data = self.fetch_image_data(pic_url)
                     _logger.info(str(image_data))
-                    
-                    # Create a new contact in Odoo
-                    Contact = request.env['res.partner']
-                    new_contact = Contact.sudo().create({
+
+                    vals = {
+                        'sender_id':senderPsid,
                         'name': name,
                         'image_1920': image_data,
                         'property_account_receivable_id': False,
                         'property_account_payable_id': False,
                         # Other contact fields you want to populate
-                    })
+                    }
+                    
+                    existing_contact = http.request.env['res.partner'].sudo().search([('sender_id', '=', senderPsid)])
+                    if existing_contact:
+                        existing_contact.write(vals)
+                    else:
+                    # Create a new contact in Odoo
+                        Contact = request.env['res.partner']
+                        new_contact = Contact.sudo().create()
                     # sdata = request.session.get('sender_data')
                     # _logger.info(str(sdata))
                     # WebhookData.create({
@@ -95,26 +101,26 @@ class WebhookController(http.Controller):
         else:
             return None
 
-class ProfileController(http.Controller):
-    @http.route('/display_data', type='http', auth='public', methods=['GET'], csrf=False)
-    def display_data(self, **post):
-        # Retrieve sender_data from session
-        # sender_data = request.session.get('sender_data')
-        # print(sender_data)
-        # _logger.info(str(sender_data))
-        # return Response(str(sender_data), content_type='text/plain',status=200)
-        # sender_data = request.params.get('sender_data')
+# class ProfileController(http.Controller):
+#     @http.route('/display_data', type='http', auth='public', methods=['GET'], csrf=False)
+#     def display_data(self, **post):
+#         # Retrieve sender_data from session
+#         # sender_data = request.session.get('sender_data')
+#         # print(sender_data)
+#         # _logger.info(str(sender_data))
+#         # return Response(str(sender_data), content_type='text/plain',status=200)
+#         # sender_data = request.params.get('sender_data')
         
-        # _logger.info("Retrieved sender_data from URL parameters: %s", sender_data)
+#         # _logger.info("Retrieved sender_data from URL parameters: %s", sender_data)
         
-        # return Response(str(sender_data), content_type='text/plain', status=200)
+#         # return Response(str(sender_data), content_type='text/plain', status=200)
 
-        webhook_data = http.request.env['ol_messenger_integration.webhook_data'].search([])
-        # Process webhook_data as needed
+#         webhook_data = http.request.env['ol_messenger_integration.webhook_data'].search([])
+#         # Process webhook_data as needed
         
-        return http.request.render('ol_messenger_integration.messenger_integeration_view.xml', {
-            'webhook_data': webhook_data
-        })
+#         return http.request.render('ol_messenger_integration.messenger_integeration_view.xml', {
+#             'webhook_data': webhook_data
+#         })
 
         # Now you can use sender_data to display on a webpage or process further
         # ...
