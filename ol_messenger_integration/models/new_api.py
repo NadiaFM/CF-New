@@ -6,13 +6,7 @@ import logging
 from werkzeug.utils import redirect
 import base64
 
-from odoo import models, fields
 
-class WebhookData(models.Model):
-    _inherit = 'res.partner'
-
-    sender_id = fields.Char(string='Sender ID')
-    # message = fields.Char(string='Message')
 
 _logger = logging.getLogger(__name__)
 
