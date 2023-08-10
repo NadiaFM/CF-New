@@ -3,7 +3,7 @@ from odoo.http import request
 from werkzeug.wrappers import Response
 import json, requests
 import logging
-from odoo.addons.http_routing.models.ir_http import slug
+from werkzeug.utils import redirect
 
 _logger = logging.getLogger(__name__)
 
@@ -51,7 +51,7 @@ class WebhookController(http.Controller):
                     redirect_url = "/display_data?sender_data={}".format(sender_data)
             
             # Redirect the user to the second controller
-                    return http.redirect_with_hash(redirect_url)
+                    return redirect(redirect_url)
                 # return Response('Ok', status=200)
                 return Response(webhookEvent, status=200)
         else:
