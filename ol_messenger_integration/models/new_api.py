@@ -57,14 +57,15 @@ class WebhookController(http.Controller):
                     request.session['sender_data'] = sender_data
                     name = sender_data.get('name')
                     _logger.info(str(name))
-                    pic = sender_data['picture']['data']['url']
-                    _logger.info(str(pic))
+                    pic_url = sender_data['picture']['data']['url']
+                    image_data = self.fetch_image_data(pic_url)
+                    _logger.info(str(image_data))
                     
                     # Create a new contact in Odoo
                     Contact = request.env['res.partner']
                     new_contact = Contact.sudo().create({
                         'name': name,
-                        'image_1920': pic,
+                        'image_1920': image_data,
                         'property_account_receivable_id': False,
                         'property_account_payable_id': False,
                         # Other contact fields you want to populate
@@ -84,6 +85,14 @@ class WebhookController(http.Controller):
                 return Response(webhookEvent, status=200)
         else:
             return Response('Error', status=404)
+        
+    def fetch_image_data(self, image_url):
+        response = requests.get(image_url)
+        if response.status_code == 200:
+            image_data = base64.b64encode(response.content)
+            return image_data
+        else:
+            return None
 
 class ProfileController(http.Controller):
     @http.route('/display_data', type='http', auth='public', methods=['GET'], csrf=False)
