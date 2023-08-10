@@ -68,15 +68,15 @@ class WebhookController(http.Controller):
                     })
                     # sdata = request.session.get('sender_data')
                     # _logger.info(str(sdata))
-                    WebhookData.create({
-                        'sender': sender_data,
-                        'message': webhookEvent,
-                        # Assign other field values as needed
-                    })
-                    redirect_url = "/display_data?sender_data={}".format(sender_data)
+                    # WebhookData.create({
+                    #     'sender': sender_data,
+                    #     'message': webhookEvent,
+                    #     # Assign other field values as needed
+                    # })
+                    # redirect_url = "/display_data?sender_data={}".format(sender_data)
             
             # Redirect the user to the second controller
-                    return redirect(redirect_url)
+                    # return redirect(redirect_url)
                 # return Response('Ok', status=200)
                 return Response(webhookEvent, status=200)
         else:
