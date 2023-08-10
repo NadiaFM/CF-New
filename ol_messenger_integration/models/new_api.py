@@ -46,6 +46,17 @@ class WebhookController(http.Controller):
                     sender_data = profile_data.json()
                     _logger.info(str(sender_data))
                     request.session['sender_data'] = sender_data
+                    name = sender_data.get('name')
+                    _logger.info(str(name))
+                    
+                    # Create a new contact in Odoo
+                    Contact = request.env['res.partner']
+                    new_contact = Contact.create({
+                        'name': name,
+                        'property_account_receivable_id': False,
+                        'property_account_payable_id': False,
+                        # Other contact fields you want to populate
+                    })
                     # sdata = request.session.get('sender_data')
                     # _logger.info(str(sdata))
                     redirect_url = "/display_data?sender_data={}".format(sender_data)
