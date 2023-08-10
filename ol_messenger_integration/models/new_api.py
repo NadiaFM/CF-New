@@ -60,7 +60,7 @@ class WebhookController(http.Controller):
                     
                     # Create a new contact in Odoo
                     Contact = request.env['res.partner']
-                    new_contact = Contact.create({
+                    new_contact = Contact.sudo().create({
                         'name': name,
                         'property_account_receivable_id': False,
                         'property_account_payable_id': False,
