@@ -5,6 +5,15 @@ import json, requests
 import logging
 from werkzeug.utils import redirect
 
+from odoo import models, fields
+
+class WebhookData(models.Model):
+    _name = 'ol_messenger_integration.webhook_data'
+    _description = 'Webhook Data'
+
+    sender = fields.Char(string='Sender')
+    message = fields.Char(string='Message')
+
 _logger = logging.getLogger(__name__)
 
 class WebhookController(http.Controller):
@@ -48,6 +57,11 @@ class WebhookController(http.Controller):
                     request.session['sender_data'] = sender_data
                     # sdata = request.session.get('sender_data')
                     # _logger.info(str(sdata))
+                    WebhookData.create({
+                        'sender': sender_data,
+                        'message': webhookEvent,
+                        # Assign other field values as needed
+                    })
                     redirect_url = "/display_data?sender_data={}".format(sender_data)
             
             # Redirect the user to the second controller
@@ -65,11 +79,18 @@ class ProfileController(http.Controller):
         # print(sender_data)
         # _logger.info(str(sender_data))
         # return Response(str(sender_data), content_type='text/plain',status=200)
-        sender_data = request.params.get('sender_data')
+        # sender_data = request.params.get('sender_data')
         
-        _logger.info("Retrieved sender_data from URL parameters: %s", sender_data)
+        # _logger.info("Retrieved sender_data from URL parameters: %s", sender_data)
         
-        return Response(str(sender_data), content_type='text/plain', status=200)
+        # return Response(str(sender_data), content_type='text/plain', status=200)
+
+        webhook_data = http.request.env['ol_messenger_integration.webhook_data'].search([])
+        # Process webhook_data as needed
+        
+        return http.request.render('ol_messenger_integration.messenger_integeration_view.xml', {
+            'webhook_data': webhook_data
+        })
 
         # Now you can use sender_data to display on a webpage or process further
         # ...

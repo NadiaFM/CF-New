@@ -1,10 +1,18 @@
 <odoo>
-    <template id="messenger_integration" name="messenger_integration">
+    <template id="messenger_integeration_view">
         <t t-call="website.layout">
-
+            <div class="container">
+                <h1>Stored Webhook Data</h1>
+                <ul>
+                    <t t-foreach="webhook_data" t-as="data">
+                        <li>
+                            <p><strong>Sender:</strong> <t t-esc="data.sender" /></p>
+                            <p><strong>Message:</strong> <t t-esc="data.message" /></p>
+                            <!-- Add other fields as needed -->
+                        </li>
+                    </t>
+                </ul>
+            </div>
         </t>
-
     </template>
-
-
 </odoo>

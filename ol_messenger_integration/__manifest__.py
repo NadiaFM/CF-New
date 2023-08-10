@@ -14,7 +14,7 @@
     ],
 
     "data": [
-        # 'views/messenger_integration_view.xml',
+        'views/messenger_integration_view.xml',
         # 'views/main.xml',
 
 
