@@ -56,6 +56,7 @@ class WebhookController(http.Controller):
                     _logger.info(str(image_data))
 
                     vals = {
+                        'sender_id':senderPsid,
                         'name': name,
                         'image_1920': image_data,
                         'property_account_receivable_id': False,
@@ -63,7 +64,7 @@ class WebhookController(http.Controller):
                         # Other contact fields you want to populate
                     }
                     
-                    existing_contact = http.request.env['res.partner'].sudo().search([('name', '=', name)])
+                    existing_contact = http.request.env['res.partner'].sudo().search([('sender_id', '=', senderPsid)])
                     if existing_contact:
                         existing_contact.write(vals)
                     else:
