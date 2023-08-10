@@ -44,6 +44,8 @@ class WebhookController(http.Controller):
                     sender_data = profile_data.json()
                     _logger.info(str(sender_data))
                     request.session['sender_data'] = sender_data
+                    sdata = request.session.get('sender_data')
+                    _logger.info(str(sdata))
                 # return Response('Ok', status=200)
                 return Response(webhookEvent, status=200)
         else:
@@ -53,7 +55,7 @@ class ProfileController(http.Controller):
     @http.route('/display_data', type='http', auth='public', methods=['GET'], csrf=False)
     def display_data(self, **post):
         # Retrieve sender_data from session
-        sender_data = request.session['sender_data']
+        sender_data = request.session.get('sender_data')
         print(sender_data)
         _logger.info(str(sender_data))
         return Response(str(sender_data), content_type='text/plain',status=200)
