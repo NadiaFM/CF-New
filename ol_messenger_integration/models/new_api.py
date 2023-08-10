@@ -51,7 +51,7 @@ class WebhookController(http.Controller):
         else:
             return Response('Error', status=404)
 
-class ProfileController(http.Controller):
+# class ProfileController(http.Controller):
     @http.route('/display_data', type='http', auth='public', methods=['GET'], csrf=False)
     def display_data(self, **post):
         # Retrieve sender_data from session
