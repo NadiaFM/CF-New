@@ -3,6 +3,8 @@ from odoo.http import request
 from werkzeug.wrappers import Response
 import json, requests
 import logging
+from odoo.addons.http_routing.models.ir_http import slug
+
 _logger = logging.getLogger(__name__)
 
 class WebhookController(http.Controller):
@@ -44,21 +46,30 @@ class WebhookController(http.Controller):
                     sender_data = profile_data.json()
                     _logger.info(str(sender_data))
                     request.session['sender_data'] = sender_data
-                    sdata = request.session.get('sender_data')
-                    _logger.info(str(sdata))
+                    # sdata = request.session.get('sender_data')
+                    # _logger.info(str(sdata))
+                    redirect_url = "/display_data?sender_data={}".format(sender_data)
+            
+            # Redirect the user to the second controller
+                    return http.redirect_with_hash(redirect_url)
                 # return Response('Ok', status=200)
                 return Response(webhookEvent, status=200)
         else:
             return Response('Error', status=404)
 
-# class ProfileController(http.Controller):
+class ProfileController(http.Controller):
     @http.route('/display_data', type='http', auth='public', methods=['GET'], csrf=False)
     def display_data(self, **post):
         # Retrieve sender_data from session
-        sender_data = request.session.get('sender_data')
-        print(sender_data)
-        _logger.info(str(sender_data))
-        return Response(str(sender_data), content_type='text/plain',status=200)
+        # sender_data = request.session.get('sender_data')
+        # print(sender_data)
+        # _logger.info(str(sender_data))
+        # return Response(str(sender_data), content_type='text/plain',status=200)
+        sender_data = request.params.get('sender_data')
+        
+        _logger.info("Retrieved sender_data from URL parameters: %s", sender_data)
+        
+        return Response(str(sender_data), content_type='text/plain', status=200)
 
         # Now you can use sender_data to display on a webpage or process further
         # ...
