@@ -1,7 +1,7 @@
 from odoo import http
 from odoo.http import request
 from werkzeug.wrappers import Response
-import json
+import json, requests
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -24,8 +24,8 @@ class WebhookController(http.Controller):
         data = request.httprequest.data
         body = data.decode('utf-8')
         new = eval(body)
-        _logger.info(str(eval(body)))
-        _logger.info(str(new))
+        # _logger.info(str(eval(body)))
+        # _logger.info(str(new))
         # print(body)
         # body = json.loads(data.decode('utf-8'))
         # if 'object' in body and body['object'] == 'page':
@@ -39,6 +39,10 @@ class WebhookController(http.Controller):
                 if 'message' in webhookEvent:
                     # return Response(webhookEvent, status=200)
                     _logger.info(str(webhookEvent))
+                    url = "https://graph.facebook.com/{}?fields=id,name,email,picture&access_token={}".format(senderPsid, "EAA0GF4cZCxPkBOwDZBDm92wHtUCgVVuXYTM6NbtkXMzEeQ5wyzeEqhCGsMdeqSeoDjDAH07GZBkWSoCBKPqTZBr6XEbcPb04Lrr4KkbHafeC7rzhqMiZCIKHG0fYSyU6XZA3jgMsQNOqJlu4dm5O9RN3R9qsT009oZAE3yeXu6svFVfOJMmG7bAH5kZCMU2FqGve")
+                    profile_data = requests.get(url)
+                    sender_data = profile_data.json()
+                    _logger.info(str(sender_data))
                 # return Response('Ok', status=200)
                 return Response(webhookEvent, status=200)
         else:
