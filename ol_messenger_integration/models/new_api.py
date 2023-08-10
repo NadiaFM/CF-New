@@ -54,7 +54,7 @@ class ProfileController(http.Controller):
     def display_data(self, **post):
         # Retrieve sender_data from session
         sender_data = request.session.get('sender_data')
-        return Response(sender_data, status=200)
+        return Response(sender_data, content_type='text/plain',status=200)
 
         # Now you can use sender_data to display on a webpage or process further
         # ...
