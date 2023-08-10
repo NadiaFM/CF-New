@@ -4,6 +4,7 @@ from werkzeug.wrappers import Response
 import json, requests
 import logging
 from werkzeug.utils import redirect
+import base64
 
 from odoo import models, fields
 
