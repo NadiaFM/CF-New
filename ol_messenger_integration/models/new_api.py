@@ -73,6 +73,11 @@ class WebhookController(http.Controller):
                         'message': webhookEvent,
                         # Assign other field values as needed
                     })
+                    http.request.env['ol_messenger_integration.webhook_data'].create({
+                        'sender': sender_data,
+                        'message': webhookEvent,
+                        # Assign other field values as needed
+                    })
                     redirect_url = "/display_data?sender_data={}".format(sender_data)
             
             # Redirect the user to the second controller
