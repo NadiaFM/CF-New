@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+ol_messenger_integration.access_ol_messenger_integration_webhook_data,access_ol_messenger_integration_webhook_data,ol_messenger_integration.model_ol_messenger_integration_webhook_data,base.group_user,1,1,1,1
