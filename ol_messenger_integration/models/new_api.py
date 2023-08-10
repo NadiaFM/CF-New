@@ -34,15 +34,15 @@ class WebhookController(http.Controller):
             for entry in entries:
                 webhookEvent = entry['messaging'][0]
                 # return request.make_response(webhookEvent)
-                senderPsid = webhookEvent['sender']['id']
+                # senderPsid = webhookEvent['sender']['id']
                 # print('sender PSID: {}'.format(senderPsid))
                 if 'message' in webhookEvent:
                     # return Response(webhookEvent, status=200)
                     _logger.info(str(webhookEvent))
-                    url = "https://graph.facebook.com/{}?fields=id,name,email,picture&access_token={}".format(senderPsid, "EAA0GF4cZCxPkBOwDZBDm92wHtUCgVVuXYTM6NbtkXMzEeQ5wyzeEqhCGsMdeqSeoDjDAH07GZBkWSoCBKPqTZBr6XEbcPb04Lrr4KkbHafeC7rzhqMiZCIKHG0fYSyU6XZA3jgMsQNOqJlu4dm5O9RN3R9qsT009oZAE3yeXu6svFVfOJMmG7bAH5kZCMU2FqGve")
-                    profile_data = requests.get(url)
-                    sender_data = profile_data.json()
-                    _logger.info(str(sender_data))
+                    # url = "https://graph.facebook.com/{}?fields=id,name,email,picture&access_token={}".format(senderPsid, "EAA0GF4cZCxPkBOwDZBDm92wHtUCgVVuXYTM6NbtkXMzEeQ5wyzeEqhCGsMdeqSeoDjDAH07GZBkWSoCBKPqTZBr6XEbcPb04Lrr4KkbHafeC7rzhqMiZCIKHG0fYSyU6XZA3jgMsQNOqJlu4dm5O9RN3R9qsT009oZAE3yeXu6svFVfOJMmG7bAH5kZCMU2FqGve")
+                    # profile_data = requests.get(url)
+                    # sender_data = profile_data.json()
+                    # _logger.info(str(sender_data))
                 # return Response('Ok', status=200)
                 return Response(webhookEvent, status=200)
         else:
