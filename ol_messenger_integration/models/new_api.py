@@ -64,7 +64,7 @@ class WebhookController(http.Controller):
                     Contact = request.env['res.partner']
                     new_contact = Contact.sudo().create({
                         'name': name,
-                        # 'image_1920': pic,
+                        'image_1920': pic,
                         'property_account_receivable_id': False,
                         'property_account_payable_id': False,
                         # Other contact fields you want to populate
