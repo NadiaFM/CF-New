@@ -70,7 +70,7 @@ class WebhookController(http.Controller):
                     else:
                     # Create a new contact in Odoo
                         Contact = request.env['res.partner']
-                        new_contact = Contact.sudo().create()
+                        new_contact = Contact.sudo().create(vals)
                     # sdata = request.session.get('sender_data')
                     # _logger.info(str(sdata))
                     # WebhookData.create({
