@@ -34,7 +34,7 @@ class WebhookController(http.Controller):
             for entry in entries:
                 webhookEvent = entry['messaging'][0]
                 # return request.make_response(webhookEvent)
-                # senderPsid = webhookEvent['sender']['id']
+                senderPsid = webhookEvent['sender']['id']
                 # print('sender PSID: {}'.format(senderPsid))
                 if 'message' in webhookEvent:
                     # return Response(webhookEvent, status=200)
