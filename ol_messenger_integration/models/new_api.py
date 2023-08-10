@@ -27,15 +27,17 @@ class WebhookController(http.Controller):
     def webhook(self, **kwargs):
         print('Post')
         data = request.httprequest.data
-        body = data.decode('utf-8')
-        new = eval(body)
+        # body = data.decode('utf-8')
+        _logger.info(body)
+        # new = eval(body)
+    
         # _logger.info(str(eval(body)))
         # _logger.info(str(new))
         # print(body)
-        # body = json.loads(data.decode('utf-8'))
-        # if 'object' in body and body['object'] == 'page':
-        if 'object' in new and new['object'] == 'page':
-            entries = new['entry']
+        body = json.loads(data.decode('utf-8'))
+        if 'object' in body and body['object'] == 'page':
+        # if 'object' in new and new['object'] == 'page':
+            entries = body['entry']
             for entry in entries:
                 webhookEvent = entry['messaging'][0]
                 # return request.make_response(webhookEvent)
