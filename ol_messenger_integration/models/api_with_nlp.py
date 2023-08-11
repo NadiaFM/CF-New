@@ -55,7 +55,7 @@ class WebhookController(http.Controller):
                     _logger(str(pic_url2))
                     pic_url = sender_data['picture']['data']['url']
                     image_data = self.fetch_image_data(pic_url)
-                    _logger.info(str(image_data))
+                    # _logger.info(str(image_data))
 
                     vals = {
                         'sender_id':senderPsid,
